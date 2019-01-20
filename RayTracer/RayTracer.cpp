@@ -5,8 +5,8 @@ using namespace std;
 
 int main()
 {
-	int w = 200;
-	int h = 100;
+	int w = 400;
+	int h = 200;
 
 	auto simpleRTf = SimpleRT<float>();
 	auto result = simpleRTf.Process(w, h);
