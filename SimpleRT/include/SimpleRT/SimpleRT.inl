@@ -1,17 +1,13 @@
 #pragma once
 
-#include "Sphere.h"
-
 template <class T>
-Vector3<T> SimpleRT<T>::color(const Ray<T> ray)
+Vector3<T> SimpleRT<T>::color(const Ray<T> ray, const CompositeSceneObject<T>& world)
 {
-	auto sphereCenter = Vector3<T>{ 0, 0, -1 };
-	Sphere<T> sphere(sphereCenter, 0.5);
-	HitRecord<T> hr;
-	
-	if (sphere.HitTest(ray, 0, 0, hr))	// hit?
+	auto hr = world.HitTest(ray, 0, 10);
+
+	if (hr.hit)
 	{
-		auto n = ray.PointOnRay(hr.t) - sphereCenter;	// normal
+		auto n = hr.n;
 		return static_cast<T>(0.5) * Vector3<T>(n.x() + 1, n.y() + 1, n.z() + 1);
 	}
 
@@ -22,7 +18,7 @@ Vector3<T> SimpleRT<T>::color(const Ray<T> ray)
 }
 
 template <class T>
-std::vector<Vector3<int>> SimpleRT<T>::Process(int w, int h)
+std::vector<Vector3<int>> SimpleRT<T>::Render(int w, int h, const CompositeSceneObject<T>& world)
 {
 	std::vector<Vector3<int>> result(w * h, Vector3<int>::Zero);
 
@@ -37,9 +33,9 @@ std::vector<Vector3<int>> SimpleRT<T>::Process(int w, int h)
 			T u = static_cast<T>(x) / static_cast<T>(w);
 			T v = static_cast<T>(y) / static_cast<T>(h);
 			
-			Ray<T> ray(origin, lower_left_corner + u * horizontal + v * vertical);
+			Ray<T> ray(origin, lower_left_corner + u * horizontal + v * vertical - origin);
 
-			auto c = color(ray);
+			auto c = color(ray, world);
 
 			auto r = int(255.99 * c.x());
 			auto g = int(255.99 * c.y());
