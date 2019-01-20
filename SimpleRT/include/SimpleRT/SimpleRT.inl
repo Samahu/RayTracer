@@ -1,28 +1,23 @@
 #pragma once
 
-template <class T>
-bool SimpleRT<T>::hitSphere(const Vector3<T> center, float radius, Ray<T> ray)
-{
-	// Equation: t^2 * dot(b, b) + 2 * t * dot(b, a - c) + dot(a - c, a - c) == R^2
-	// where:	c is center, a is ray origin, b is direction
-
-	auto oc = ray.Origin() - center;
-	auto a = Vector3<T>::dot(ray.Direction(), ray.Direction());
-	auto b = 2 * Vector3<T>::dot(ray.Direction(), oc);
-	auto c = Vector3<T>::dot(oc, oc) - radius * radius;
-	auto discriminant = b * b - 4 * a * c;
-	return (discriminant > 0);
-}
+#include "Sphere.h"
 
 template <class T>
 Vector3<T> SimpleRT<T>::color(const Ray<T> ray)
 {
-	if (hitSphere(Vector3<T>(0, 0, -1), 0.5, ray))
-		return Vector3<T>(1.0f, 0.0f, 0.0f);
+	auto sphereCenter = Vector3<T>{ 0, 0, -1 };
+	Sphere<T> sphere(sphereCenter, 0.5);
+	HitRecord<T> hr;
+	
+	if (sphere.HitTest(ray, 0, 0, hr))	// hit?
+	{
+		auto n = ray.PointOnRay(hr.t) - sphereCenter;	// normal
+		return static_cast<T>(0.5) * Vector3<T>(n.x() + 1, n.y() + 1, n.z() + 1);
+	}
 
 	auto unit_dir = ray.Direction();
 	unit_dir.Normalize();
-	T t = static_cast<T>(0.5) * (unit_dir.y() + static_cast<T>(1.0));
+	auto t = static_cast<T>(0.5) * (unit_dir.y() + static_cast<T>(1.0));
 	return static_cast<T>(1.0 - t) * Vector3<T>::One + t * Vector3<T>(0.5f, 0.7f, 1.0f);
 }
 
