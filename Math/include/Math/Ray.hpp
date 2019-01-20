@@ -2,12 +2,9 @@
 
 #include "Vector3.hpp"
 
-template <class T>
+template <typename T>
 class Ray
 {
-	Vector3<T> origin;
-	Vector3<T> direction;
-
 public:
 	Ray(const Vector3<T> origin, const Vector3<T> direction)
 		: origin(origin), direction(direction)
@@ -19,4 +16,7 @@ public:
 
 	Vector3<T> PointOnRay(T t) const { return origin + t * direction; }
 
+private:
+	Vector3<T> origin;
+	Vector3<T> direction;
 };

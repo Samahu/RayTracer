@@ -6,7 +6,7 @@
 #include <Math/Ray.hpp>
 #include "SceneObject.hpp"
 
-template <class T>
+template <typename T>
 class SimpleRT
 {
 private:

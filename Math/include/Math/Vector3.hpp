@@ -1,13 +1,10 @@
 #pragma once
 
-template <class T>
+template <typename T>
 class Vector3
 {
-	template <class T>
+	template <typename T>
 	friend Vector3<T> operator*(T t, const Vector3<T> v);
-
-private:
-	T e[3];
 
 public:
 	Vector3() {}
@@ -43,6 +40,9 @@ public:
 
 	static const Vector3<T> Zero;
 	static const Vector3<T> One;
+
+private:
+	T e[3];
 };
 
 #include "Vector3.inl"

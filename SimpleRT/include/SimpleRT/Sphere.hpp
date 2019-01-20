@@ -2,23 +2,23 @@
 
 #include "SceneObject.hpp"
 
-template <class T>
+template <typename T>
 class Sphere : public SceneObject<T>
 {
-private:
-	Vector3<T> center;
-	T radius;
-
-private:
-	HitRecord<T> computeHitRecord(Ray<T> ray, T t) const;
-
 public:
 	Sphere() = delete;
 	Sphere(Vector3<T> c, T r) : center(c), radius(r) {}
 	HitRecord<T> HitTest(const Ray<T> ray, T tmin, T tmax) const override;
+
+private:
+	HitRecord<T> computeHitRecord(Ray<T> ray, T t) const;
+
+private:
+	Vector3<T> center;
+	T radius;
 };
 
-template<class T>
+template<typename T>
 inline HitRecord<T> Sphere<T>::computeHitRecord(Ray<T> ray, T t) const
 {
 	HitRecord<T> hr;
@@ -28,7 +28,7 @@ inline HitRecord<T> Sphere<T>::computeHitRecord(Ray<T> ray, T t) const
 	return hr;
 }
 
-template<class T>
+template<typename T>
 inline HitRecord<T> Sphere<T>::HitTest(const Ray<T> ray, T tmin, T tmax) const
 {
 	// Equation: t^2 * dot(b, b) + 2 * t * dot(b, a - c) + dot(a - c, a - c) == R^2

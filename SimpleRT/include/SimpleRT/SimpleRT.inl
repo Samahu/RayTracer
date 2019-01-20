@@ -1,6 +1,8 @@
 #pragma once
 
-template <class T>
+#include "Camera.hpp"
+
+template <typename T>
 Vector3<T> SimpleRT<T>::color(const Ray<T> ray, const CompositeSceneObject<T>& world)
 {
 	auto hr = world.HitTest(ray, 0, 10);
@@ -17,15 +19,12 @@ Vector3<T> SimpleRT<T>::color(const Ray<T> ray, const CompositeSceneObject<T>& w
 	return static_cast<T>(1.0 - t) * Vector3<T>::One + t * Vector3<T>(0.5f, 0.7f, 1.0f);
 }
 
-template <class T>
+template <typename T>
 std::vector<Vector3<int>> SimpleRT<T>::Render(int w, int h, const CompositeSceneObject<T>& world)
 {
 	std::vector<Vector3<int>> result(w * h, Vector3<int>::Zero);
+	Camera<T> camera;
 
-	Vector3<T> lower_left_corner(-2.0, -1.0, -1.0);
-	Vector3<T> horizontal(4.0, 0.0, 0);
-	Vector3<T> vertical(0.0, 2.0, 0);
-	auto origin = Vector3<T>::Zero;
 
 	for (auto y = h - 1; y >= 0; --y)
 		for (auto x = 0; x < w; ++x)
@@ -33,7 +32,8 @@ std::vector<Vector3<int>> SimpleRT<T>::Render(int w, int h, const CompositeScene
 			T u = static_cast<T>(x) / static_cast<T>(w);
 			T v = static_cast<T>(y) / static_cast<T>(h);
 			
-			Ray<T> ray(origin, lower_left_corner + u * horizontal + v * vertical - origin);
+			// TODO implement anti-aliasing later
+			auto ray = camera.CastRay(u, v);
 
 			auto c = color(ray, world);
 
