@@ -3,9 +3,10 @@
 #include <chrono>
 
 
+#include <SceneObjects/Sphere.hpp>
+#include <SceneObjects/CompositeSceneObject.hpp>
 #include <SimpleRT/SimpleRT.hpp>
-#include <SimpleRT/Sphere.hpp>
-#include <SimpleRT/CompositeSceneObject.hpp>
+
 
 using namespace std;
 

@@ -2,6 +2,20 @@
 
 #include "SceneObject.hpp"
 
+#include <vector>
+
+template <typename T>
+class CompositeSceneObject : public SceneObject<T>
+{
+public:
+	HitRecord<T> HitTest(const Ray<T> ray, T tmin, T tmax) const override;
+
+	void Add(std::unique_ptr<SceneObject<T>> sceneObject);
+
+private:
+	std::vector<std::unique_ptr<SceneObject<T>>> sceneObjects;
+};
+
 template<typename T>
 inline void CompositeSceneObject<T>::Add(std::unique_ptr<SceneObject<T>> sceneObject)
 {

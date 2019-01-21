@@ -4,7 +4,8 @@
 
 #include <Math/Vector3.hpp>
 #include <Math/Ray.hpp>
-#include "SceneObject.hpp"
+#include <SceneObjects/SceneObject.hpp>
+#include <SceneObjects/CompositeSceneObject.hpp>
 
 template <typename T>
 class SimpleRT
