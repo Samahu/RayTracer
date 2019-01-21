@@ -1,6 +1,6 @@
 project (SimpleRT)
 
-add_library(${PROJECT_NAME} src/SimpleRT.cpp)
+add_library(${PROJECT_NAME} STATIC src/SimpleRT.cpp)
 add_library(sub::SimpleRT ALIAS ${PROJECT_NAME})
 
 target_include_directories(${PROJECT_NAME}
@@ -8,6 +8,6 @@ target_include_directories(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME}
-    sub::Math
+	sub::Math
 	sub::SceneObjects
 )

@@ -1,7 +1,7 @@
 project (SceneObjects)
 
 
-add_library(${PROJECT_NAME} src/SceneObjects.cpp)
+add_library(${PROJECT_NAME} STATIC src/SceneObjects.cpp)
 add_library(sub::SceneObjects ALIAS ${PROJECT_NAME})
 
 target_include_directories( ${PROJECT_NAME}
