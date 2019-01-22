@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SceneObject.hpp"
+#include <math.h>
 
 template <typename T>
 class Sphere : public SceneObject<T>

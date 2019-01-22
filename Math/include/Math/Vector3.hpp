@@ -3,8 +3,8 @@
 template <typename T>
 class Vector3
 {
-	template <typename T>
-	friend Vector3<T> operator*(T t, const Vector3<T> v);
+	template <typename G>
+	friend Vector3<G> operator*(G t, const Vector3<G> v);
 
 public:
 	Vector3() {}
