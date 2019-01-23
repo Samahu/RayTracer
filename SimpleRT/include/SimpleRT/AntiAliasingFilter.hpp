@@ -36,7 +36,7 @@ inline Vector3<T> RandomAntiAliasingFilter<T>::Sample(int x, int y, const Camera
 	auto samples_count = 16;
 	auto c = Vector3<T>::Zero;
 
-	for (auto i = 0; i < 16; ++i)
+	for (auto i = 0; i < samples_count; ++i)
 	{
 		T u = static_cast<T>(x + urd(gen)) / static_cast<T>(w);
 		T v = static_cast<T>(y + urd(gen)) / static_cast<T>(h);
