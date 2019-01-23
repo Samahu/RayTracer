@@ -23,6 +23,7 @@ template<typename T>
 inline HitRecord<T> Sphere<T>::computeHitRecord(Ray<T> ray, T t) const
 {
 	HitRecord<T> hr;
+    hr.hit = true;
 	hr.t = t;
 	hr.p = ray.PointOnRay(t);
 	hr.n = (hr.p - center) / radius;
@@ -47,13 +48,11 @@ inline HitRecord<T> Sphere<T>::HitTest(const Ray<T> ray, T tmin, T tmax) const
 		auto temp = (-b - sqrt(delta)) / a;
 		if (temp > tmin && temp < tmax)
 			return computeHitRecord(ray, temp);
-	}
-	else
-	{
-		auto temp = (-b + sqrt(delta)) / a;
-		if (temp > tmin && temp < tmax)
-			return computeHitRecord(ray, temp);
-	}
+        
+        temp = (-b + sqrt(delta)) / a;
+        if (temp > tmin && temp < tmax)
+            return computeHitRecord(ray, temp);
+    }
 
 	HitRecord<T> hr{ false, 0 };
 	return hr;

@@ -64,7 +64,7 @@ int main()
 {
 	int w = 400;
 	int h = 200;
-	
+
 	auto s1 = simplertf(w, h);
 	write("simplertf.ppm", w, h, s1);
 
