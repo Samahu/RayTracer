@@ -1,4 +1,4 @@
-project(RayTracer)
+project(RayTracerCmd)
 
 # Create the executable
 add_executable(${PROJECT_NAME} RayTracer.cpp)
