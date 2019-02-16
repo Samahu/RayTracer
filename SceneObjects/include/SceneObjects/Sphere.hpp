@@ -1,7 +1,7 @@
 #pragma once
 
-#include "SceneObject.hpp"
 #include <math.h>
+#include "SceneObject.hpp"
 
 template <typename T>
 class Sphere : public SceneObject<T>
@@ -10,6 +10,7 @@ public:
 	Sphere() = delete;
 	Sphere(Vector3<T> c, T r) : center(c), radius(r) {}
 	HitRecord<T> HitTest(const Ray<T> ray, T tmin, T tmax) const override;
+	void SetMaterial(std::shared_ptr<Material<T>> material) override { this->material = material; }
 
 private:
 	HitRecord<T> computeHitRecord(Ray<T> ray, T t) const;
@@ -17,6 +18,7 @@ private:
 private:
 	Vector3<T> center;
 	T radius;
+	std::shared_ptr<Material<T>> material;
 };
 
 template<typename T>
@@ -27,6 +29,7 @@ inline HitRecord<T> Sphere<T>::computeHitRecord(Ray<T> ray, T t) const
 	hr.t = t;
 	hr.p = ray.PointOnRay(t);
 	hr.n = (hr.p - center) / radius;
+	hr.m = material;
 	return hr;
 }
 

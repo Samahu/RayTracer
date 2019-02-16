@@ -4,6 +4,9 @@ template <typename T>
 Vector3<T> operator*(T t, const Vector3<T> v) { return Vector3<T>(v.e[0] * t, v.e[1] * t, v.e[2] * t); }
 
 template <typename T>
+Vector3<T> operator-(const Vector3<T> v) { return Vector3<T>(-v.e[0], -v.e[1], -v.e[2]); }
+
+template <typename T>
 T Vector3<T>::SquaredLength() const
 {
 	return e[0] * e[0] + e[1] * e[1] + e[2] * e[2];

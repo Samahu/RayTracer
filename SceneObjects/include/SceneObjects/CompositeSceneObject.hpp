@@ -9,6 +9,7 @@ class CompositeSceneObject : public SceneObject<T>
 {
 public:
 	HitRecord<T> HitTest(const Ray<T> ray, T tmin, T tmax) const override;
+	void SetMaterial(std::shared_ptr<Material<T>> material) override {}
 
 	void Add(std::unique_ptr<SceneObject<T>> sceneObject);
 

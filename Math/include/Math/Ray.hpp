@@ -6,6 +6,10 @@ template <typename T>
 class Ray
 {
 public:
+	Ray()
+	{
+	}
+
 	Ray(const Vector3<T> origin, const Vector3<T> direction)
 		: origin(origin), direction(direction)
 	{
