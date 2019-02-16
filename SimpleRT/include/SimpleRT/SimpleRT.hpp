@@ -11,7 +11,8 @@ template <typename T>
 class SimpleRT
 {
 private:
-	Vector3<T> color(const Ray<T> ray, const CompositeSceneObject<T>& world);
+	Vector3<T> random_in_unit_sphere() const;
+	Vector3<T> color(const Ray<T> ray, const CompositeSceneObject<T>& world) const;
 
 public:
 	std::vector<Vector3<int>> Render(int w, int h, const CompositeSceneObject<T>& world);

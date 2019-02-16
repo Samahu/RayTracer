@@ -22,14 +22,23 @@ auto Run(string desc, T method)
 	return results;
 }
 
-auto simplertf(int w, int h)
+template <typename T>
+auto composeWorld()
 {
 	// Construct world
-	auto world = std::make_unique<CompositeSceneObject<float>>();
-	auto sphere1 = std::make_unique<Sphere<float>>(Vector3<float>{ 0.0f, 0.0f, -1.0f }, 0.5f);
+	auto world = std::make_unique<CompositeSceneObject<T>>();
+	auto sphere1 = std::make_unique<Sphere<T>>(Vector3<T>{ 0.0f, 0.0f, -1.0f }, 0.5f);
 	world->Add(move(sphere1));
-	auto sphere2 = std::make_unique<Sphere<float>>(Vector3<float>{ 1.5f, 0.0f, -1.0f }, 0.5f);
+	auto sphere2 = std::make_unique<Sphere<T>>(Vector3<T>{ 1.5f, 0.0f, -1.0f }, 0.5f);
 	world->Add(move(sphere2));
+	auto sphere3 = std::make_unique<Sphere<T>>(Vector3<T>{ 0.0f, -5.0f, -1.0f }, 4.5f);
+	world->Add(move(sphere3));
+	return world;
+}
+
+auto simplertf(int w, int h)
+{
+	auto world = composeWorld<float>();
 	auto simpleRTf = SimpleRT<float>();
 
 	return Run("SimpleRTf", [&simpleRTf, w, h, &world] { return simpleRTf.Render(w, h, *world); });
@@ -37,12 +46,7 @@ auto simplertf(int w, int h)
 
 auto simplertd(int w, int h)
 {
-	// Construct world
-	auto world = std::make_unique<CompositeSceneObject<double>>();
-	auto sphere1 = std::make_unique<Sphere<double>>(Vector3<double>{ 0.0, 0.0, -1.0 }, 0.5);
-	world->Add(move(sphere1));
-	auto sphere2 = std::make_unique<Sphere<double>>(Vector3<double>{ 1.5, 0.0, -1.0 }, 0.5);
-	world->Add(move(sphere2));
+	auto world = composeWorld<double>();
 	auto simpleRTd = SimpleRT<double>();
 
 	return Run("SimpleRTd", [&simpleRTd, w, h, &world] { return simpleRTd.Render(w, h, *world); });
