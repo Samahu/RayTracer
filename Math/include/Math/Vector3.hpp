@@ -46,6 +46,7 @@ public:
 
 
 	static T dot(const Vector3<T> v1, const Vector3<T> v2);
+	static Vector3<T> cross(const Vector3<T> v1, const Vector3<T> v2);
 
 	static const Vector3<T> Zero;
 	static const Vector3<T> One;

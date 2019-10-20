@@ -3,6 +3,9 @@
 #include <random>
 #include <limits>
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 #include <Materials/Material.h>
 
 #include "Camera.hpp"
@@ -45,7 +48,15 @@ template <typename T>
 std::vector<Vector3<int>> SimpleRT<T>::Render(int w, int h, const CompositeSceneObject<T>& world)
 {
 	std::vector<Vector3<int>> result(w * h, Vector3<int>::Zero);
-	auto camera = Camera<T>{ w, h };
+
+	auto eye = Vector3<T>{ 3.0f, 3.0f, 2.0f };
+	auto lookAt = Vector3<T>{ 0.0f, 0.0f, -1.0f };
+	auto up = Vector3<T>{ 0.0f, 1.0f, 0.0f };
+	auto dist_to_focus = (lookAt - eye).Length();
+	auto aperture = 2.0f;
+	auto camera = Camera<T>{ w, h,
+		eye, lookAt, up, 
+		static_cast<T>(M_PI_4), aperture, dist_to_focus };
 	auto sampler = RandomAntiAliasingFilter<T>{};
 
 	for (auto y = h - 1; y >= 0; --y)

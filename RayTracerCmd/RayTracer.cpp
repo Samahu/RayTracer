@@ -54,9 +54,69 @@ auto composeWorld()
 	return world;
 }
 
+template <typename T>
+auto composeWorld2()
+{
+	// Construct world
+	auto world = std::make_unique<CompositeSceneObject<T>>();
+
+	auto sphere0 = std::make_unique<Sphere<T>>(Vector3<T>{ 0.0f, -1000.0f, 0.0f }, 1000.0f);
+	sphere0->SetMaterial(std::make_shared<Lambertian<T>>(Vector3<T>{ 0.5f, 0.5f, 0.5f }));
+	world->Add(move(sphere0));
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<T> urd(0.0f, 1.0f);
+
+	for (auto a = -11; a < 11; ++a)
+		for (auto b = -11; b < 11; ++b)
+		{
+			auto choose_mat = urd(gen);
+			auto center = Vector3<T>{ a + 0.9f * urd(gen), 0.2f, b + 0.9f * urd(gen) };
+			std::unique_ptr<SceneObject<T>> sobj;
+
+			if ((center - Vector3<T>{4.0f, 0.2f, 0.0}).Length() > 0.9f)
+			{
+				sobj = std::make_unique<Sphere<T>>(center, 0.2f);
+				
+				if (choose_mat < 0.8)
+				{
+					sobj->SetMaterial(std::make_shared<Lambertian<T>>(
+						Vector3<T>{ urd(gen)*urd(gen), urd(gen)*urd(gen), urd(gen)*urd(gen) }));
+				}
+				else if (choose_mat < 0.95)
+				{
+					sobj->SetMaterial(std::make_shared<Metal<T>>(
+						Vector3<T>{ 0.5f*(1+urd(gen)), 0.5f*(1 + urd(gen)), 0.5f*(1 + urd(gen)) }, 0.5f*urd(gen)));
+				}
+				else
+				{
+					sobj->SetMaterial(std::make_shared<Dielectric<T>>(1.5f));
+				}
+
+				world->Add(move(sobj));
+			}
+		}
+
+	auto sphere2 = std::make_unique<Sphere<T>>(Vector3<T>{ 0.0f, 1.0f, 0.0f }, 1.0f);
+	sphere2->SetMaterial(std::make_shared<Dielectric<T>>(1.5f));
+
+	world->Add(move(sphere2));
+
+	auto sphere3 = std::make_unique<Sphere<T>>(Vector3<T>{ -4.0f, 1.0f, 0.0f }, 1.0f);
+	sphere3->SetMaterial(std::make_shared<Lambertian<T>>(Vector3<T>{ 0.4f, 0.2f, 0.1f }));
+	world->Add(move(sphere3));
+
+	auto sphere4 = std::make_unique<Sphere<T>>(Vector3<T>{ 4.0f, 1.0f, 0.0f }, 1.0f);
+	sphere4->SetMaterial(std::make_shared<Metal<T>>(Vector3<T>{ 0.7f, 0.2f, 0.5f }, 0.0f));
+	world->Add(move(sphere4));
+
+	return world;
+}
+
 auto simplertf(int w, int h)
 {
-	auto world = composeWorld<float>();
+	auto world = composeWorld2<float>();
 	auto simpleRTf = SimpleRT<float>();
 
 	return Run("SimpleRTf", [&simpleRTf, w, h, &world] { return simpleRTf.Render(w, h, *world); });
@@ -64,7 +124,7 @@ auto simplertf(int w, int h)
 
 auto simplertd(int w, int h)
 {
-	auto world = composeWorld<double>();
+	auto world = composeWorld2<double>();
 	auto simpleRTd = SimpleRT<double>();
 
 	return Run("SimpleRTd", [&simpleRTd, w, h, &world] { return simpleRTd.Render(w, h, *world); });
@@ -84,8 +144,8 @@ void write(string fileName, int w, int h, vector<Vector3<int>> results)
 
 int main()
 {
-	int w = 400;
-	int h = 200;
+	int w = 40;
+	int h = 20;
 
 	auto s1 = simplertf(w, h);
 	write("simplertf.ppm", w, h, s1);
