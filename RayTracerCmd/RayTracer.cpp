@@ -9,6 +9,7 @@
 #include <Materials/Metal.h>
 #include <Materials/Dielectric.h>
 #include <SimpleRT/SimpleRT.hpp>
+#include <OpenMP_RT/OpenMP_RT.hpp>
 
 
 using namespace std;
@@ -130,6 +131,14 @@ auto simplertd(int w, int h)
 	return Run("SimpleRTd", [&simpleRTd, w, h, &world] { return simpleRTd.Render(w, h, *world); });
 }
 
+auto openmprtd(int w, int h)
+{
+	auto world = composeWorld2<double>();
+	auto openmpRTd = OpenMP_RT<double>();
+
+	return Run("openmprtd", [&openmpRTd, w, h, &world] { return openmpRTd.Render(w, h, *world); });
+}
+
 void write(string fileName, int w, int h, vector<Vector3<int>> results)
 {
 	auto out = ofstream();
@@ -142,16 +151,21 @@ void write(string fileName, int w, int h, vector<Vector3<int>> results)
 	out.close();
 }
 
+
 int main()
 {
-	int w = 40;
-	int h = 20;
-
+	int w = 100;
+	int h = 50;
+/*
 	auto s1 = simplertf(w, h);
 	write("simplertf.ppm", w, h, s1);
+*/
 
 	auto s2 = simplertd(w, h);
 	write("simplertd.ppm", w, h, s2);
+
+	auto s4 = openmprtd(w, h);
+	write("openmprtd.ppm", w, h, s4);
 
 	return cin.get();
 }
