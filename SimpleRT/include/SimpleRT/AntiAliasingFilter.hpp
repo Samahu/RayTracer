@@ -3,7 +3,7 @@
 #include <random>
 #include <functional>
 
-#include "Camera.hpp"
+#include <Camera.hpp>
 
 template <typename T>
 class AntiAliasingFilter

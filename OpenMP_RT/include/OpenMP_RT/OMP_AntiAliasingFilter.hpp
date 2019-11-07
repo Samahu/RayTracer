@@ -5,13 +5,13 @@
 #include <vector>
 #include <thread>
 
-#include "OMP_Camera.hpp"
+#include <Camera.hpp>
 
 template <typename T>
 class OMP_AntiAliasingFilter
 {
 public:
-	virtual Vector3<T> Sample(int x, int y, const OMP_Camera<T>& camera, const CompositeSceneObject<T>& world,
+	virtual Vector3<T> Sample(int x, int y, const Camera<T>& camera, const CompositeSceneObject<T>& world,
 		const std::function< Vector3<T> (const Ray<T>&, const CompositeSceneObject<T>&) >& lambda) = 0;
 };
 
@@ -20,12 +20,12 @@ template <typename T>
 class OMP_RandomAntiAliasingFilter : public OMP_AntiAliasingFilter<T>
 {
 public:
-	Vector3<T> Sample(int x, int y, const OMP_Camera<T>& camera, const CompositeSceneObject<T>& world,
+	Vector3<T> Sample(int x, int y, const Camera<T>& camera, const CompositeSceneObject<T>& world,
 		const std::function< Vector3<T>(const Ray<T>&, const CompositeSceneObject<T>&) >& lambda) override;
 };
 
 template<typename T>
-inline Vector3<T> OMP_RandomAntiAliasingFilter<T>::Sample(int x, int y, const OMP_Camera<T>& camera, const CompositeSceneObject<T>& world,
+inline Vector3<T> OMP_RandomAntiAliasingFilter<T>::Sample(int x, int y, const Camera<T>& camera, const CompositeSceneObject<T>& world,
 	const std::function< Vector3<T>(const Ray<T>&, const CompositeSceneObject<T>&) >& lambda)
 {
 	std::random_device rd;

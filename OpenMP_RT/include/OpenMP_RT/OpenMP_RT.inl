@@ -8,7 +8,7 @@
 
 #include <Materials/Material.h>
 
-#include "OMP_Camera.hpp"
+#include <Camera.hpp>
 #include "OMP_AntiAliasingFilter.hpp"
 
 template <typename T>
@@ -54,7 +54,7 @@ std::vector<Vector3<int>> OpenMP_RT<T>::Render(int w, int h, const CompositeScen
 	auto up = Vector3<T>{ 0.0f, 1.0f, 0.0f };
 	auto dist_to_focus = (lookAt - eye).Length();
 	auto aperture = 2.0f;
-	auto camera = OMP_Camera<T>{ w, h,
+	auto camera = Camera<T>{ w, h,
 		eye, lookAt, up, 
 		static_cast<T>(M_PI_4), aperture, dist_to_focus };
 	auto sampler = OMP_RandomAntiAliasingFilter<T>{};

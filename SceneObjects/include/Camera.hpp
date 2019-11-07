@@ -9,7 +9,6 @@ public:
 	Camera(int width, int height, Vector3<T> eye, Vector3<T> lookAt, Vector3<T> up, T vfov, T aperture, T focus_dist)
 		: width(width), height(height), lens_radius(aperture / 2)
 	{
-
 		auto aspect = static_cast<T>(width) / static_cast<T>(height);
 		auto half_height = tan(0.5f * vfov);
 		auto half_width = aspect * half_height;
