@@ -9,6 +9,7 @@
 #include <Materials/Metal.h>
 #include <Materials/Dielectric.h>
 #include <SimpleRT/SimpleRT.hpp>
+#include <MultiThreadedRT/MultiThreadedRT.hpp>
 #include <OpenMP_RT/OpenMP_RT.hpp>
 
 
@@ -66,7 +67,7 @@ auto composeWorld2()
 	world->Add(move(sphere0));
 
 	std::random_device rd;
-	std::mt19937 gen(rd());
+	std::mt19937 gen(rd);
 	std::uniform_real_distribution<T> urd(0.0f, 1.0f);
 
 	for (auto a = -11; a < 11; ++a)
@@ -131,6 +132,15 @@ auto simplertd(int w, int h)
 	return Run("SimpleRTd", [&simpleRTd, w, h, &world] { return simpleRTd.Render(w, h, *world); });
 }
 
+auto multithreadedrtd(int w, int h)
+{
+	auto world = composeWorld2<double>();
+	auto multithreadedRTd = MultiThreadedRT<double>();
+
+	return Run("multithreadedrtd", [&multithreadedRTd, w, h, &world] { return multithreadedRTd.Render(w, h, *world); });
+}
+
+
 auto openmprtd(int w, int h)
 {
 	auto world = composeWorld2<double>();
@@ -151,7 +161,6 @@ void write(string fileName, int w, int h, vector<Vector3<int>> results)
 	out.close();
 }
 
-
 int main()
 {
 	int w = 100;
@@ -163,6 +172,9 @@ int main()
 
 	auto s2 = simplertd(w, h);
 	write("simplertd.ppm", w, h, s2);
+
+	auto s3 = multithreadedrtd(w, h);
+	write("multithreadedrtd.ppm", w, h, s3);
 
 	auto s4 = openmprtd(w, h);
 	write("openmprtd.ppm", w, h, s4);
