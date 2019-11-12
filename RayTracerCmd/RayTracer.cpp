@@ -59,7 +59,7 @@ auto composeWorld()
 auto composeWorld2()
 {
 	// Construct world
-	auto world = std::make_unique<CompositeSceneObject>();
+	auto world = std::make_shared<CompositeSceneObject>();
 
 	auto sphere0 = std::make_unique<Sphere>(Vector3d{ 0.0, -1000.0, 0.0 }, 1000.0);
 	sphere0->SetMaterial(std::make_shared<Lambertian>(Vector3d{ 0.5, 0.5, 0.5 }));
@@ -115,29 +115,26 @@ auto composeWorld2()
 	return world;
 }
 
-auto simplertd(int w, int h)
+auto simplert(int w, int h, std::shared_ptr<CompositeSceneObject> world)
 {
-	auto world = composeWorld2();
 	auto simpleRTd = SimpleRT();
 
-	return Run("SimpleRTd", [&simpleRTd, w, h, &world] { return simpleRTd.Render(w, h, *world); });
+	return Run("SimpleRT", [&simpleRTd, w, h, &world] { return simpleRTd.Render(w, h, *world); });
 }
 
-auto multithreadedrtd(int w, int h)
+auto multithreadedrt(int w, int h, std::shared_ptr<CompositeSceneObject> world)
 {
-	auto world = composeWorld2();
-	auto multithreadedRTd = MultiThreadedRT();
+	auto multithreadedRT = MultiThreadedRT();
 
-	return Run("multithreadedrtd", [&multithreadedRTd, w, h, &world] { return multithreadedRTd.Render(w, h, *world); });
+	return Run("MultiThreadedRT", [&multithreadedRT, w, h, &world] { return multithreadedRT.Render(w, h, *world); });
 }
 
 
-auto openmprtd(int w, int h)
+auto openmprt(int w, int h, std::shared_ptr<CompositeSceneObject> world)
 {
-	auto world = composeWorld2();
-	auto openmpRTd = OpenMP_RT();
+	auto openmpRT = OpenMP_RT();
 
-	return Run("openmprtd", [&openmpRTd, w, h, &world] { return openmpRTd.Render(w, h, *world); });
+	return Run("OpenMP_RT", [&openmpRT, w, h, &world] { return openmpRT.Render(w, h, *world); });
 }
 
 void write(string fileName, int w, int h, vector<Vector3i> results)
@@ -157,14 +154,16 @@ int main()
 	int w = 100;
 	int h = 50;
 
-	auto s2 = simplertd(w, h);
-	write("simplertd.ppm", w, h, s2);
+	auto world = composeWorld2();
 
-	auto s3 = multithreadedrtd(w, h);
-	write("multithreadedrtd.ppm", w, h, s3);
+	auto s2 = simplert(w, h, world);
+	write("simplert.ppm", w, h, s2);
 
-	auto s4 = openmprtd(w, h);
-	write("openmprtd.ppm", w, h, s4);
+	auto s3 = multithreadedrt(w, h, world);
+	write("multithreadedrt.ppm", w, h, s3);
+
+	auto s4 = openmprt(w, h, world);
+	write("openmprt.ppm", w, h, s4);
 
 	return cin.get();
 }
