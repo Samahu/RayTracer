@@ -55,4 +55,8 @@ private:
 	T e[3];
 };
 
+typedef Vector3<int> Vector3i;
+typedef Vector3<float> Vector3f;
+typedef Vector3<double> Vector3d;
+
 #include "Vector3.inl"

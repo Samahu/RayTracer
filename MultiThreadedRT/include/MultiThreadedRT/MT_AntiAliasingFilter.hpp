@@ -8,34 +8,30 @@
 
 #include <Camera.hpp>
 
-template <typename T>
 class MT_AntiAliasingFilter
 {
 public:
-	virtual Vector3<T> Sample(int x, int y, const Camera<T>& camera, const CompositeSceneObject<T>& world,
-		const std::function< Vector3<T> (const Ray<T>&, const CompositeSceneObject<T>&) >& lambda) = 0;
+	virtual Vector3d Sample(int x, int y, const Camera& camera, const CompositeSceneObject& world,
+		const std::function< Vector3d (const Ray3d&, const CompositeSceneObject&) >& lambda) = 0;
 };
 
-
-template <typename T>
-class MT_RandomAntiAliasingFilter : public MT_AntiAliasingFilter<T>
+class MT_RandomAntiAliasingFilter : public MT_AntiAliasingFilter
 {
 public:
-	Vector3<T> Sample(int x, int y, const Camera<T>& camera, const CompositeSceneObject<T>& world,
-		const std::function< Vector3<T>(const Ray<T>&, const CompositeSceneObject<T>&) >& lambda) override;
+	Vector3d Sample(int x, int y, const Camera& camera, const CompositeSceneObject& world,
+		const std::function< Vector3d(const Ray3d&, const CompositeSceneObject&) >& lambda) override;
 };
 
-template<typename T>
-inline Vector3<T> MT_RandomAntiAliasingFilter<T>::Sample(int x, int y, const Camera<T>& camera, const CompositeSceneObject<T>& world,
-	const std::function< Vector3<T>(const Ray<T>&, const CompositeSceneObject<T>&) >& lambda)
+inline Vector3d MT_RandomAntiAliasingFilter::Sample(int x, int y, const Camera& camera, const CompositeSceneObject& world,
+	const std::function< Vector3d(const Ray3d&, const CompositeSceneObject&) >& lambda)
 {
 	auto w = camera.Width();
 	auto h = camera.Height();
 
 	auto samples_count = 16;
-	auto c = Vector3<T>::Zero;
+	auto c = Vector3d::Zero;
 	
-	std::vector<std::future<Vector3<T>>> results;
+	std::vector<std::future<Vector3d>> results;
 	results.resize(samples_count);
 
 	for (auto i = 0; i < samples_count; ++i)
@@ -43,11 +39,11 @@ inline Vector3<T> MT_RandomAntiAliasingFilter<T>::Sample(int x, int y, const Cam
 		results[i] = std::async(std::launch::async, [&c, w, h, x, y, &camera, &world, &lambda]() {
 
 			std::random_device rd;
-			std::mt19937 gen(rd);
+			std::mt19937 gen(rd());
 			std::uniform_real_distribution<double> urd(0.0, 1.0);
 
-			T u = static_cast<T>(x + urd(gen)) / static_cast<T>(w);
-			T v = static_cast<T>(y + urd(gen)) / static_cast<T>(h);
+			auto u = (x + urd(gen)) / w;
+			auto v = (y + urd(gen)) / h;
 
 			auto ray = camera.CastRay(u, v);
 			auto s = lambda(ray, world);
@@ -59,5 +55,5 @@ inline Vector3<T> MT_RandomAntiAliasingFilter<T>::Sample(int x, int y, const Cam
 	for (auto &f : results)
 		c += f.get();
 
-	return c / static_cast<T>(samples_count);
+	return c / samples_count;
 }

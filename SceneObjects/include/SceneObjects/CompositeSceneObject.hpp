@@ -1,32 +1,29 @@
 #pragma once
 
-#include "SceneObject.hpp"
-
 #include <vector>
+#include "SceneObject.hpp"
+#include "HitRecord.hpp"
 
-template <typename T>
-class CompositeSceneObject : public SceneObject<T>
+class CompositeSceneObject : public SceneObject
 {
 public:
-	HitRecord<T> HitTest(const Ray<T> ray, T tmin, T tmax) const override;
-	void SetMaterial(std::shared_ptr<Material<T>> material) override {}
+	HitRecord HitTest(const Ray3d ray, double tmin, double tmax) const override;
+	void SetMaterial(std::shared_ptr<Material> material) override {}
 
-	void Add(std::unique_ptr<SceneObject<T>> sceneObject);
+	void Add(std::unique_ptr<SceneObject> sceneObject);
 
 private:
-	std::vector<std::unique_ptr<SceneObject<T>>> sceneObjects;
+	std::vector<std::unique_ptr<SceneObject>> sceneObjects;
 };
 
-template<typename T>
-inline void CompositeSceneObject<T>::Add(std::unique_ptr<SceneObject<T>> sceneObject)
+inline void CompositeSceneObject::Add(std::unique_ptr<SceneObject> sceneObject)
 {
 	sceneObjects.push_back(std::move(sceneObject));
 }
 
-template<typename T>
-inline HitRecord<T> CompositeSceneObject<T>::HitTest(const Ray<T> ray, T tmin, T tmax) const
+inline HitRecord CompositeSceneObject::HitTest(const Ray3d ray, double tmin, double tmax) const
 {
-	auto hr = HitRecord<T>{ false };
+	auto hr = HitRecord{ false };
 
 	auto closestHit = tmax;
 

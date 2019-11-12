@@ -72,9 +72,8 @@ public slots:
     void setRendererType(RendererType rendererType);
 
 protected:
-    std::vector<Vector3<int>> renderSimpleRTf();
-    std::vector<Vector3<int>> renderSimpleRTd();
-    void updateBuffer(const std::vector<Vector3<int>>& results);
+    std::vector<Vector3i> renderSimpleRTd();
+    void updateBuffer(const std::vector<Vector3i>& results);
     void displayBuffer(int w, int h);
 
 private:

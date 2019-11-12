@@ -35,13 +35,10 @@ void RenderArea::setRendererType(RendererType rendererType)
 {
     this->rendererType = rendererType;
 
-    vector<Vector3<int>> results;
+    vector<Vector3i> results;
 
     switch (rendererType)
     {
-    case RendererType::SimpleRTf:
-        results = renderSimpleRTf();
-        break;
     case RendererType::SimpleRTd:
         results = renderSimpleRTd();
         break;
@@ -51,39 +48,23 @@ void RenderArea::setRendererType(RendererType rendererType)
     displayBuffer(this->width(), this->height());
 }
 
-vector<Vector3<int>> RenderArea::renderSimpleRTf()
+vector<Vector3i> RenderArea::renderSimpleRTd()
 {
     auto w = buffer.width();
     auto h = buffer.height();
 
     // Construct world
-    auto world = std::make_unique<CompositeSceneObject<float>>();
-    auto sphere1 = std::make_unique<Sphere<float>>(Vector3<float>{ 0.0, 0.0, -1.0 }, 0.5);
+    auto world = std::make_unique<CompositeSceneObject>();
+    auto sphere1 = std::make_unique<Sphere>(Vector3d{ 0.0, 0.0, -1.0 }, 0.5);
     world->Add(std::move(sphere1));
-    auto sphere2 = std::make_unique<Sphere<float>>(Vector3<float>{ 1.5, 0.0, -1.0 }, 0.5);
+    auto sphere2 = std::make_unique<Sphere>(Vector3d{ 1.5, 0.0, -1.0 }, 0.5);
     world->Add(std::move(sphere2));
-    auto simpleRTd = SimpleRT<float>();
+    auto simpleRTd = SimpleRT();
 
     return simpleRTd.Render(w, h, *world);
 }
 
-vector<Vector3<int>> RenderArea::renderSimpleRTd()
-{
-    auto w = buffer.width();
-    auto h = buffer.height();
-
-    // Construct world
-    auto world = std::make_unique<CompositeSceneObject<double>>();
-    auto sphere1 = std::make_unique<Sphere<double>>(Vector3<double>{ 0.0, 0.0, -1.0 }, 0.5);
-    world->Add(std::move(sphere1));
-    auto sphere2 = std::make_unique<Sphere<double>>(Vector3<double>{ 1.5, 0.0, -1.0 }, 0.5);
-    world->Add(std::move(sphere2));
-    auto simpleRTd = SimpleRT<double>();
-
-    return simpleRTd.Render(w, h, *world);
-}
-
-void RenderArea::updateBuffer(const std::vector<Vector3<int>>& results)
+void RenderArea::updateBuffer(const std::vector<Vector3i>& results)
 {
     auto w = buffer.width();
     auto h = buffer.height();

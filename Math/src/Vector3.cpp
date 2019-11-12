@@ -1,7 +1,6 @@
 #include "Math/Vector3.hpp"
 #include <math.h>
 
-
 template <>
 const Vector3<int> Vector3<int>::Zero(0, 0, 0);
 

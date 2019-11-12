@@ -7,26 +7,22 @@
 
 #include <Camera.hpp>
 
-template <typename T>
 class OMP_AntiAliasingFilter
 {
 public:
-	virtual Vector3<T> Sample(int x, int y, const Camera<T>& camera, const CompositeSceneObject<T>& world,
-		const std::function< Vector3<T> (const Ray<T>&, const CompositeSceneObject<T>&) >& lambda) = 0;
+	virtual Vector3d Sample(int x, int y, const Camera& camera, const CompositeSceneObject& world,
+		const std::function< Vector3d (const Ray3d&, const CompositeSceneObject&) >& lambda) = 0;
 };
 
-
-template <typename T>
-class OMP_RandomAntiAliasingFilter : public OMP_AntiAliasingFilter<T>
+class OMP_RandomAntiAliasingFilter : public OMP_AntiAliasingFilter
 {
 public:
-	Vector3<T> Sample(int x, int y, const Camera<T>& camera, const CompositeSceneObject<T>& world,
-		const std::function< Vector3<T>(const Ray<T>&, const CompositeSceneObject<T>&) >& lambda) override;
+	Vector3d Sample(int x, int y, const Camera& camera, const CompositeSceneObject& world,
+		const std::function< Vector3d(const Ray3d&, const CompositeSceneObject&) >& lambda) override;
 };
 
-template<typename T>
-inline Vector3<T> OMP_RandomAntiAliasingFilter<T>::Sample(int x, int y, const Camera<T>& camera, const CompositeSceneObject<T>& world,
-	const std::function< Vector3<T>(const Ray<T>&, const CompositeSceneObject<T>&) >& lambda)
+inline Vector3d OMP_RandomAntiAliasingFilter::Sample(int x, int y, const Camera& camera, const CompositeSceneObject& world,
+	const std::function< Vector3d(const Ray3d&, const CompositeSceneObject&) >& lambda)
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
@@ -36,15 +32,15 @@ inline Vector3<T> OMP_RandomAntiAliasingFilter<T>::Sample(int x, int y, const Ca
 	auto h = camera.Height();
 
 	auto samples_count = 16;
-	auto c = Vector3<T>::Zero;
+	auto c = Vector3d::Zero;
 
 #pragma omp parallel
 	{
 #pragma omp for
 		for (auto i = 0; i < samples_count; ++i)
 		{
-			T u = static_cast<T>(x + urd(gen)) / static_cast<T>(w);
-			T v = static_cast<T>(y + urd(gen)) / static_cast<T>(h);
+			auto u = (x + urd(gen)) / w;
+			auto v = (y + urd(gen)) / h;
 
 			auto ray = camera.CastRay(u, v);
 			auto s = lambda(ray, world);
@@ -52,5 +48,5 @@ inline Vector3<T> OMP_RandomAntiAliasingFilter<T>::Sample(int x, int y, const Ca
 		}
 	}
 
-	return c / static_cast<T>(samples_count);
+	return c / samples_count;
 }
