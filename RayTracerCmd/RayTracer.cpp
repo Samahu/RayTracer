@@ -27,30 +27,29 @@ auto Run(string desc, T method)
 	return results;
 }
 
-template <typename T>
 auto composeWorld()
 {
 	// Construct world
 	auto world = std::make_unique<CompositeSceneObject>();
 
-	auto sphere1 = std::make_unique<Sphere>(Vector3<T>{ 0.0f, 0.0f, -1.0f }, 0.5f);
-	sphere1->SetMaterial(std::make_shared<Lambertian<T>>(Vector3<T>{ 0.1f, 0.2f, 0.5f }));
+	auto sphere1 = std::make_unique<Sphere>(Vector3d{ 0.0, 0.0, -1.0 }, 0.5);
+	sphere1->SetMaterial(std::make_shared<Lambertian>(Vector3d{ 0.1, 0.2, 0.5 }));
 	world->Add(move(sphere1));
 
-	auto sphere2 = std::make_unique<Sphere>(Vector3<T>{ 0.0f, -100.5f, -1.0f }, 100.0f);
-	sphere2->SetMaterial(std::make_shared<Lambertian<T>>(Vector3<T>{ 0.8f, 0.8f, 0.0f }));
+	auto sphere2 = std::make_unique<Sphere>(Vector3d{ 0.0, -100.5, -1.0 }, 100.0);
+	sphere2->SetMaterial(std::make_shared<Lambertian>(Vector3d{ 0.8, 0.8, 0.0 }));
 	world->Add(move(sphere2));
 
-	auto sphere3 = std::make_unique<Sphere>(Vector3<T>{ 1.0f, 0.0f, -1.0f }, 0.5f);
-	sphere3->SetMaterial(std::make_shared<Metal<T>>(Vector3<T>{ 0.8f, 0.6f, 0.2f }, 0.0f));
+	auto sphere3 = std::make_unique<Sphere>(Vector3d{ 1.0, 0.0, -1.0 }, 0.5);
+	sphere3->SetMaterial(std::make_shared<Metal>(Vector3d{ 0.8, 0.6, 0.2 }, 0.0));
 	world->Add(move(sphere3));
 
-	auto sphere4 = std::make_unique<Sphere>(Vector3<T>{ -1.0f, 0.0f, -1.0f }, 0.5f);
-	sphere4->SetMaterial(std::make_shared<Dielectric<T>>(1.5f));
+	auto sphere4 = std::make_unique<Sphere>(Vector3d{ -1.0, 0.0, -1.0 }, 0.5);
+	sphere4->SetMaterial(std::make_shared<Dielectric>(1.5));
 	world->Add(move(sphere4));
 
-	auto sphere5 = std::make_unique<Sphere>(Vector3<T>{ -1.0f, 0.0f, -1.0f }, -0.45f);
-	sphere5->SetMaterial(std::make_shared<Dielectric<T>>(1.5f));
+	auto sphere5 = std::make_unique<Sphere>(Vector3d{ -1.0, 0.0, -1.0 }, -0.45);
+	sphere5->SetMaterial(std::make_shared<Dielectric>(1.5));
 	world->Add(move(sphere5));
 
 	return world;
@@ -67,7 +66,7 @@ auto composeWorld2()
 
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_real_distribution<double> urd(0.0f, 1.0f);
+	std::uniform_real_distribution<double> urd(0.0, 1.0);
 
 	for (auto a = -11; a < 11; ++a)
 		for (auto b = -11; b < 11; ++b)

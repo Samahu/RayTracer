@@ -47,7 +47,7 @@ std::vector<Vector3i> OpenMP_RT::Render(int w, int h, const CompositeSceneObject
 {
 	std::vector<Vector3i> result(w * h, Vector3i::Zero);
 
-	auto eye = Vector3d{ 3.0f, 3.0, 2.0 };
+	auto eye = Vector3d{ 3.0, 3.0, 2.0 };
 	auto lookAt = Vector3d{ 0.0, 0.0, -1.0 };
 	auto up = Vector3d{ 0.0, 1.0, 0.0 };
 	auto dist_to_focus = (lookAt - eye).Length();

@@ -41,11 +41,11 @@ private:
 
 		std::random_device rd;
 		std::mt19937 gen(rd());
-		std::uniform_real_distribution<double> urd(0.0f, 1.0f);
+		std::uniform_real_distribution<double> urd(0.0, 1.0);
 
 		do
 		{
-			p = Vector3d{ urd(gen), urd(gen), 0.0f } - Vector3d{ 1.0, 1.0, 0 };
+			p = Vector3d{ urd(gen), urd(gen), 0.0 } - Vector3d{ 1.0, 1.0, 0 };
 		} while (Vector3d::dot(p, p) >= 1.0);
 
 		return p;

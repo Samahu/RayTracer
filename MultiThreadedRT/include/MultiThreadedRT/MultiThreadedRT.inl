@@ -71,7 +71,6 @@ std::vector<Vector3i> MultiThreadedRT::Render(int w, int h, const CompositeScene
 				// SIMPLE GAMMA CORRECTION
 				// correct = origin^(1/gamma)	-> here gamma is 2
 				c = Vector3d(sqrt(c.x()), sqrt(c.y()), sqrt(c.z()));
-				c = Vector3d(sqrt(c.x()), sqrt(c.y()), sqrt(c.z()));
 
 				auto r = int(255.99 * c.x());
 				auto g = int(255.99 * c.y());
